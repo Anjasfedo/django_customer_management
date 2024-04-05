@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="card card-body">
+        <h1>Confirm to delete "{{ order }}"</h1>
+        <form action="" method="POST">
+          {% csrf_token %}
+          {% comment %} <a href="{% url 'dashboard' %}">Cancel</a> {% endcomment %}
+          <a class="btn btn-sm btn-warning" href="{{ request.META.HTTP_REFERER }}">Go back</a>
+          <input class="btn btn-sm btn-danger" type="submit" value="Delete" />
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

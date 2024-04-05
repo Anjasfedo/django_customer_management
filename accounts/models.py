@@ -32,7 +32,7 @@ class Product(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     tags = models.ManyToManyField(Tag)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -50,3 +50,6 @@ class Order(models.Model):
     status = models.CharField(max_length=50, null=True, choices=STATUS)
     created_at = models.DateTimeField(
         auto_now_add=True, null=True)
+    
+    def __str__(self):
+        return self.product.name
