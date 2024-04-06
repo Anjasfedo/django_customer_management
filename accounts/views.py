@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
+from django.forms import inlineformset_factory
 from .models import Order, Customer, Product
 from .forms import OrderForm
 
 # Create your views here.
 
 
-def home(request):
+def dashboard(request):
+    """
+    Render dashboard page
+    """
     context = {
         'orders': Order.objects.all().order_by("-id")[:5],
         'customers': Customer.objects.all(),
@@ -19,6 +23,9 @@ def home(request):
 
 
 def products(request):
+    """
+    Render products page
+    """
     context = {
         'products': Product.objects.all()
     }
@@ -27,6 +34,9 @@ def products(request):
 
 
 def customers(request, pk):
+    """
+    Render customer page with primary key as parameter
+    """
     customer = Customer.objects.get(id=pk)
     orders = customer.order_set.all()
     total_order = orders.count()
@@ -40,23 +50,39 @@ def customers(request, pk):
     return render(request, 'accounts/customers.html', context)
 
 
-def create_order(request):
+def create_order(request, pk):
+    """
+    Render create order of inlin formset with primary key of customer as parameter
+    """
+    OrderFormSet = inlineformset_factory(
+        Customer, Order, fields=('product', 'status'), extra=10)
+    customer = Customer.objects.get(id=pk)
+
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
+        # * Form without inline set
+        # form = OrderForm(request.POST)
+
+        forms = OrderFormSet(request.POST, instance=customer)
+        if forms.is_valid():
+            forms.save()
             return redirect('dashboard')
 
-    form = OrderForm()
+    # * Form without inline set
+    # form = OrderForm(initial={'customer': customer})
+
+    forms = OrderFormSet(queryset=Order.objects.none(), instance=customer)
 
     context = {
-        'form': form
+        'forms': forms
     }
 
     return render(request, 'accounts/order_form.html', context)
 
 
 def update_order(request, pk):
+    """
+    Render form page for update with primary key of order as parameter
+    """
     order = Order.objects.get(id=pk)
 
     if request.method == 'POST':
@@ -75,6 +101,9 @@ def update_order(request, pk):
 
 
 def delete_order(request, pk):
+    """
+    Render order_delete with primary key of order as parameter
+    """
     order = Order.objects.get(id=pk)
 
     if request.method == 'POST':
