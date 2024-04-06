@@ -1,7 +1,7 @@
 {% load static %}
-<nav class="navbar bg-dark border-bottom border-body navbar-expand-lg mb-3" data-bs-theme="dark">
+<nav class="navbar bg-dark border-bottom border-body navbar-expand-lg mb-3 px-5" data-bs-theme="dark">
   <div class="container-fluid">
-    <img src="{% static 'img/img-blank.png' %}" alt="logo" width="50">
+    <img src="{% static 'img/img-blank.png' %}" alt="logo" width="50" />
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
@@ -14,4 +14,9 @@
       </ul>
     </div>
   </div>
+  <span class="text-light fw-bold">
+    Hewro
+    {{ request.user }}
+  </span>
+  <a class="btn btn-sm btn-danger" href="{% url 'logout' %}">Logout</a>
 </nav>

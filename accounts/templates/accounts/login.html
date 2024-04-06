@@ -1,0 +1,25 @@
+<head>
+    {% include 'layouts/bootstrap_css.html' %}
+  </head>
+  
+  <div class="container">
+    <h1>Login</h1>
+  
+    <form action="" method="POST">
+      {% csrf_token %}
+  
+      <div class="form-floating mb-3">
+        {{ form.username }}
+        <label for="usernameInput">{{ form.username.label }}</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.password }}
+        <label for="password1Input">{{ form.password.label }}</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  </div>
+  {{form.errors}}
+  <a href="{% url 'register' %}" class="btn btn-link">Register</a>
+  {% include 'layouts/bootstrap_js.html' %}
+  

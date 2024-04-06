@@ -3,6 +3,10 @@
 {% block content %}
   {% include 'accounts/status.html' %}
 
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+
   <div class="container">
     <div class="row">
       <div class="col-md-5">
@@ -32,7 +36,7 @@
       <div class="col-md-7">
         <h5>LAST 5 ORDERS</h5>
         <div class="card card-body">
-          <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_order' %}">Create Order</a>
+          {% comment %} <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_order' %}">Create Order</a> {% endcomment %}
           <table class="table table-sm">
             <tr>
               <th>Product</th>
