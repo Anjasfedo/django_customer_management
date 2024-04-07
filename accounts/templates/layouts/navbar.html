@@ -4,16 +4,20 @@
     <img src="{% static 'img/img-blank.png' %}" alt="logo" width="50" />
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      {% if request.user.is_staff %}
-        <ul class="navbar-nav">
+      <ul class="navbar-nav">
+          {% if request.user.is_staff %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'products' %}">Products</a>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_settings' %}">Settings</a>
+          </li>
+          {% endif %}
         </ul>
-      {% endif %}
     </div>
   </div>
   <span class="text-light fw-bold">

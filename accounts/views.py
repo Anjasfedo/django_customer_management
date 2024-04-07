@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 
 # Import models, forms, filters
 from .models import Order, Customer, Product
-from .forms import OrderForm, UserRegisterForm, UserLoginForm
+from .forms import OrderForm, UserRegisterForm, UserLoginForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import already_login, allow_users, admin_only
 
@@ -68,6 +68,24 @@ def user_logout(request):
 
 
 @login_required()
+@allow_users(allow_roles=['customer'])
+def user_settings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer) 
+    
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance= customer)
+        if form.is_valid():
+            form.save()
+            return redirect('user_settings')
+    
+    context = {
+        'form': form
+    }
+
+    return render(request, 'accounts/settings.html', context)
+
+
 @admin_only
 @allow_users(allow_roles=['admin'])
 def dashboard(request):

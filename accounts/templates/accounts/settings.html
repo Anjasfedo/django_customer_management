@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <dIv class="row">
+      <div class="col-md-5">
+        <div class="card card-body">
+          <a href="" class="btn btn-warning">
+            <h1>Account Settings</h1>
+
+            {% if request.user.customer.profile_img %}
+              <img src="{{ request.user.customer.profile_img.url }}" alt="" class="img-thumbnail" />
+            {% endif %}
+          </a>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="card card-body">
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
+      </div>
+    </dIv>
+  </div>
+{% endblock %}

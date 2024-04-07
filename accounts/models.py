@@ -9,10 +9,12 @@ class Customer(models.Model):
     name = models.CharField(max_length=50, null=True)
     phone = models.CharField(max_length=20, null=True)
     email = models.CharField(max_length=50, null=True)
+    profile_img = models.ImageField(
+        default='default.png', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.user.username
 
 
 class Tag(models.Model):
