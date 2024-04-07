@@ -4,27 +4,32 @@ from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 # Import models, forms, filters
 from .models import Order, Customer, Product
 from .forms import OrderForm, UserRegisterForm, UserLoginForm
 from .filters import OrderFilter
+from .decorators import already_login, allow_users, admin_only
 
 # Create your views here.
 
 
+@already_login
 def user_register(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    
     form = UserRegisterForm()
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, f'User {user} created')
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='customer')
+
+            user.groups.add(group)
+
+            messages.success(request, f'User {username} created')
             return redirect('dashboard')
 
     context = {
@@ -34,10 +39,8 @@ def user_register(request):
     return render(request, 'accounts/register.html', context)
 
 
+@already_login
 def user_login(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    
     form = UserLoginForm()
 
     if request.method == 'POST':
@@ -46,7 +49,6 @@ def user_login(request):
             form.clean()
             user = form.get_user()
             login(request, user)
-            print(user)
             messages.success(request, f'User {user} login')
             return redirect('dashboard')
 
@@ -64,6 +66,8 @@ def user_logout(request):
 
 
 @login_required()
+@admin_only
+@allow_users(allow_roles=['admin'])
 def dashboard(request):
     """
     Render dashboard page
@@ -81,6 +85,7 @@ def dashboard(request):
 
 
 @login_required()
+@allow_users(allow_roles=['admin', 'customer'])
 def products(request):
     """
     Render products page
@@ -93,6 +98,7 @@ def products(request):
 
 
 @login_required()
+@allow_users(allow_roles=['admin'])
 def customers(request, pk):
     """
     Render customer page with primary key as parameter
@@ -116,6 +122,7 @@ def customers(request, pk):
 
 
 @login_required()
+@allow_users(allow_roles=['admin'])
 def create_order(request, pk):
     """
     Render create order of inlin formset with primary key of customer as parameter
@@ -145,6 +152,7 @@ def create_order(request, pk):
 
 
 @login_required()
+@allow_users(allow_roles=['admin'])
 def update_order(request, pk):
     """
     Render form page for update with primary key of order as parameter
@@ -166,6 +174,7 @@ def update_order(request, pk):
 
 
 @login_required()
+@allow_users(allow_roles=['admin'])
 def delete_order(request, pk):
     """
     Render order_delete with primary key of order as parameter
