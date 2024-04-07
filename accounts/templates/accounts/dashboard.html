@@ -40,6 +40,7 @@
           <table class="table table-sm">
             <tr>
               <th>Product</th>
+              <th>Note</th>
               <th>Date Orderd</th>
               <th>Status</th>
               <th>Update</th>
@@ -49,6 +50,7 @@
             {% for order in orders %}
               <tr>
                 <td>{{ order.product }}</td>
+                <td>{{ order.note }}</td>
                 <td>{{ order.created_at }}</td>
                 <td>{{ order.status }}</td>
                 <td>

@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Order
+from .models import Order, Customer
 
 
 class OrderForm(ModelForm):
@@ -31,3 +31,10 @@ class UserLoginForm(AuthenticationForm):
         attrs={'class': 'form-control', 'id': 'usernameInput', 'placeholder': 'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class': 'form-control', 'id': 'password1Input', 'placeholder': ''}), label='Password')
+
+
+class CustomerForm(ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        exclude = ['user']
