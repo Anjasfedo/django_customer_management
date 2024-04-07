@@ -29,6 +29,8 @@ def user_register(request):
 
             user.groups.add(group)
 
+            Customer.objects.create(user=user)
+
             messages.success(request, f'User {username} created')
             return redirect('dashboard')
 
@@ -72,20 +74,34 @@ def dashboard(request):
     """
     Render dashboard page
     """
+    orders = Order.objects.all()
     context = {
-        'orders': Order.objects.all().order_by("-id")[:5],
+        'orders': orders.order_by("-id")[:5],
         'customers': Customer.objects.all(),
-        'total_customers': Customer.objects.count(),
-        'total_orders': Order.objects.count(),
-        'delivered': Order.objects.filter(status='Delivered').count(),
-        'pending': Order.objects.filter(status='Pending').count()
+        'total_orders': orders.count(),
+        'delivered': orders.filter(status='Delivered').count(),
+        'pending': orders.filter(status='Pending').count()
     }
 
     return render(request, 'accounts/dashboard.html', context)
 
 
 @login_required()
-@allow_users(allow_roles=['admin', 'customer'])
+@allow_users(allow_roles=['customer'])
+def user_page(request):
+    orders = request.user.customer.order_set.all()
+    context = {
+        'orders': orders,
+        'total_orders': orders.count(),
+        'delivered': orders.filter(status='Delivered').count(),
+        'pending': orders.filter(status='Pending').count()
+    }
+
+    return render(request, 'accounts/user_page.html', context)
+
+
+@login_required()
+@allow_users(allow_roles=['admin'])
 def products(request):
     """
     Render products page

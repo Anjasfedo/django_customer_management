@@ -36,7 +36,7 @@ def admin_only(function):
             group = request.user.groups.all()[0].name
 
         if group == 'customer':
-            return redirect('products')
+            return redirect('user_page')
 
         if group == 'admin':
             return function(request, *args, **kwargs)

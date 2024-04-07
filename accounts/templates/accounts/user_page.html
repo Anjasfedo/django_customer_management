@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  {% include 'accounts/status.html' %}
+
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+
+  <div class="container">
+    <div class="row">
+      <h5>LAST 5 ORDERS</h5>
+      <div class="card card-body">
+        {% comment %} <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_order' %}">Create Order</a> {% endcomment %}
+        <table class="table table-sm">
+          <tr>
+            <th>Product</th>
+            <th>Note</th>
+            <th>Date Orderd</th>
+            <th>Status</th>
+          </tr>
+
+          {% for order in orders %}
+            <tr>
+              <td>{{ order.product }}</td>
+              <td>{{ order.note }}</td>
+              <td>{{ order.created_at }}</td>
+              <td>{{ order.status }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
