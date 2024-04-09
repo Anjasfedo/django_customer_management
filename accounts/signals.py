@@ -1,5 +1,5 @@
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 from .models import Customer
 
@@ -7,7 +7,11 @@ from .models import Customer
 @receiver(post_save, sender=User)
 def customer_create(sender, instance, created, **kwargs):
     if created == True:
-        Customer.objects.create(instance=User)
+        group = Group.objects.get(name='customer')
+
+        instance.groups.add(group)
+        Customer.objects.create(user=instance, name=instance.username)
+
         print('Customer Created')
 
 
