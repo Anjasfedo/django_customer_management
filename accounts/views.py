@@ -29,7 +29,7 @@ def user_register(request):
 
             user.groups.add(group)
 
-            Customer.objects.create(user=user)
+            # Customer.objects.create(user=user)
 
             messages.success(request, f'User {username} created')
             return redirect('dashboard')
@@ -86,8 +86,8 @@ def user_settings(request):
     return render(request, 'accounts/settings.html', context)
 
 
-@admin_only
-@allow_users(allow_roles=['admin'])
+# @admin_only
+# @allow_users(allow_roles=['admin'])
 def dashboard(request):
     """
     Render dashboard page
