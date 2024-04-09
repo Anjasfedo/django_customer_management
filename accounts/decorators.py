@@ -21,7 +21,11 @@ def allow_users(allow_roles=[]):
                 if group in allow_roles:
                     return function(request, *args, **kwargs)
 
-                return HttpResponse('Not authorize')
+                if group == 'admin':
+                    return redirect('dashboard')
+
+                if group == 'customer':
+                    return redirect('user_page')
 
         return wrap
 

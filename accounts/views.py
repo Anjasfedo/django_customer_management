@@ -86,8 +86,8 @@ def user_settings(request):
     return render(request, 'accounts/settings.html', context)
 
 
-# @admin_only
-# @allow_users(allow_roles=['admin'])
+@admin_only
+@allow_users(allow_roles=['admin'])
 def dashboard(request):
     """
     Render dashboard page
