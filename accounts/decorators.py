@@ -18,10 +18,16 @@ def allow_users(allow_roles=[]):
             if request.user.groups.exists():
                 group = request.user.groups.all()[0].name
 
-                if group in allow_roles:
-                    return function(request, *args, **kwargs)
+            if group in allow_roles:
+                return function(request, *args, **kwargs)
 
-                return HttpResponse('Not authorize')
+            if group == 'admin':
+                return redirect('dashboard')
+
+            if group == 'customer':
+                return redirect('user_page')
+
+            return HttpResponse("You don't have permission to view this page.")
 
         return wrap
 
@@ -40,5 +46,7 @@ def admin_only(function):
 
         if group == 'admin':
             return function(request, *args, **kwargs)
+
+        return HttpResponse("You don't have permission to view this page.")
 
     return wrap

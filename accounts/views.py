@@ -22,14 +22,8 @@ def user_register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            form.save()
             username = form.cleaned_data.get('username')
-
-            group = Group.objects.get(name='customer')
-
-            user.groups.add(group)
-
-            Customer.objects.create(user=user)
 
             messages.success(request, f'User {username} created')
             return redirect('dashboard')
