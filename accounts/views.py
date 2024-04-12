@@ -26,7 +26,7 @@ def user_register(request):
             username = form.cleaned_data.get('username')
 
             messages.success(request, f'User {username} created')
-            return redirect('dashboard')
+            return redirect('login')
 
     context = {
         'form': form
