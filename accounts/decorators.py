@@ -16,7 +16,7 @@ def allow_users(allow_roles=[]):
         def wrap(request, *args, **kwargs):
             group = None
             if request.user.groups.exists():
-                group = request.user.groups.all()[0].name
+                group = request.user.groups.first().name
 
             if group in allow_roles:
                 return function(request, *args, **kwargs)
@@ -37,15 +37,14 @@ def allow_users(allow_roles=[]):
 def admin_only(function):
     def wrap(request, *args, **kwargs):
         group = None
-
         if request.user.groups.exists():
-            group = request.user.groups.all()[0].name
-
-        if group == 'customer':
-            return redirect('user_page')
-
+            group = request.user.groups.first().name
+        
         if group == 'admin':
             return function(request, *args, **kwargs)
+        
+        if group == 'customer':
+            return redirect('user_page')
 
         return HttpResponse("You don't have permission to view this page.")
 
